@@ -16,8 +16,18 @@
   --font-sans: var(--font-inter);
 }
 
-html {
-  scroll-behavior: smooth;
+/* ─── Lenis smooth scroll ─── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -26,7 +36,16 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Editorial underline input style */
+/* ─── Page load curtain ─── */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: var(--color-linen);
+  pointer-events: none;
+}
+
+/* ─── Editorial underline input with sweep effect ─── */
 .input-editorial {
   width: 100%;
   padding: 0.75rem 0;
@@ -37,8 +56,8 @@ body {
   font-size: 0.9375rem;
   color: var(--color-charcoal);
   letter-spacing: 0.01em;
-  transition: border-color 0.3s ease;
   outline: none;
+  position: relative;
 }
 
 .input-editorial::placeholder {
@@ -46,8 +65,25 @@ body {
   font-weight: 300;
 }
 
-.input-editorial:focus {
-  border-bottom-color: var(--color-charcoal);
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-charcoal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.input-wrap:focus-within::after {
+  transform: scaleX(1);
 }
 
 /* Prevent iOS zoom on input focus */
@@ -58,7 +94,7 @@ body {
   }
 }
 
-/* Textarea editorial */
+/* ─── Textarea editorial ─── */
 .textarea-editorial {
   width: 100%;
   padding: 0.75rem 0;
@@ -69,7 +105,6 @@ body {
   font-size: 0.9375rem;
   color: var(--color-charcoal);
   letter-spacing: 0.01em;
-  transition: border-color 0.3s ease;
   outline: none;
   resize: vertical;
   min-height: 100px;
@@ -80,11 +115,7 @@ body {
   font-weight: 300;
 }
 
-.textarea-editorial:focus {
-  border-bottom-color: var(--color-charcoal);
-}
-
-/* Service pill toggle */
+/* ─── Service pill toggle ─── */
 .pill {
   display: inline-flex;
   align-items: center;
@@ -99,7 +130,7 @@ body {
   color: var(--color-taupe);
   background: transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -108,6 +139,7 @@ body {
 .pill:hover {
   border-color: var(--color-taupe);
   color: var(--color-charcoal);
+  transform: translateY(-1px);
 }
 
 .pill-active {
@@ -120,10 +152,101 @@ body {
   background: var(--color-charcoal-light);
   border-color: var(--color-charcoal-light);
   color: var(--color-linen);
+  transform: translateY(-1px);
 }
 
-/* Selection color */
+/* ─── Marquee ─── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Magnetic button ─── */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.magnetic-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-charcoal);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.magnetic-btn:hover::before {
+  transform: scaleY(1);
+}
+
+.magnetic-btn > span {
+  position: relative;
+  z-index: 1;
+  transition: color 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.magnetic-btn:hover > span {
+  color: var(--color-linen);
+}
+
+/* ─── Link hover underline ─── */
+.link-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.link-hover::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.link-hover:hover::after {
+  transform: scaleX(1);
+}
+
+/* ─── Selection color ─── */
 ::selection {
   background-color: var(--color-charcoal);
   color: var(--color-linen);
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .magnetic-btn::before {
+    transition: none;
+  }
+  .input-wrap::after {
+    transition: none;
+  }
+  .link-hover::after {
+    transition: none;
+  }
+  .pill {
+    transition: none;
+  }
 }
