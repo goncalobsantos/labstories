@@ -1,65 +1,153 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import EnquiryForm from "@/components/EnquiryForm";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      delay,
+    },
+  }),
+};
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="flex flex-col flex-1">
+      {/* ─── Hero ─── */}
+      <section className="relative flex flex-col items-center justify-center min-h-[100dvh] px-5 sm:px-6 text-center">
+        {/* Decorative thin line */}
+        <motion.div
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-border origin-top"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+
+        <motion.p
+          custom={0.2}
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="text-[0.7rem] uppercase tracking-[0.35em] text-taupe mb-6 font-light"
+        >
+          Life Creation Studio
+        </motion.p>
+
+        <motion.h1
+          custom={0.4}
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="font-serif text-[2.75rem] sm:text-6xl md:text-7xl lg:text-8xl font-normal text-charcoal leading-[1.1] tracking-[-0.02em]"
+        >
+          LabStories
+        </motion.h1>
+
+        <motion.div
+          custom={0.6}
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="mt-6 flex items-center gap-4"
+        >
+          <span className="block w-8 h-px bg-border-dark" />
+          <p className="text-sm md:text-base text-taupe font-light tracking-[0.08em]">
+            Building our story
+          </p>
+          <span className="block w-8 h-px bg-border-dark" />
+        </motion.div>
+
+        {/* Scroll indicator — clickable */}
+        <motion.a
+          href="#enquiry"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.8 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group"
+        >
+          <span className="text-[0.6rem] uppercase tracking-[0.3em] text-taupe-light group-hover:text-taupe transition-colors duration-300">
+            Enquire
+          </span>
+          <motion.span
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            className="block w-px h-5 bg-taupe-light group-hover:bg-taupe transition-colors duration-300"
+          />
+        </motion.a>
+      </section>
+
+      {/* ─── Enquiry Form ─── */}
+      <section id="enquiry" className="relative py-20 md:py-32 px-5 sm:px-6 scroll-mt-8">
+        {/* Top border line */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-px bg-border-dark" />
+
+        <div className="max-w-xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="text-center mb-14"
+          >
+            <p className="text-[0.7rem] uppercase tracking-[0.35em] text-taupe mb-4 font-light">
+              Get in touch
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl text-charcoal font-normal">
+              Drop your enquiry below
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+          >
+            <EnquiryForm />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Footer ─── */}
+      <footer className="py-10 md:py-12 px-5 sm:px-6 border-t border-border">
+        <div className="max-w-xl mx-auto flex flex-col items-center gap-6">
+          <a
+            href="https://www.instagram.com/labstories.studio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2 text-taupe hover:text-charcoal transition-colors duration-300"
+          >
+            {/* Instagram icon */}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="transition-transform duration-300 group-hover:scale-105"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <circle cx="12" cy="12" r="5" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+            </svg>
+            <span className="text-xs uppercase tracking-[0.2em] font-light">
+              @labstories.studio
+            </span>
+          </a>
+          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-taupe-light font-light">
+            &copy; {new Date().getFullYear()} LabStories. All rights reserved.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </footer>
     </div>
   );
 }
